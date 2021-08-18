@@ -33,7 +33,7 @@ example:
 <-- {"jsonrpc": "2.0", "result": 19, "id": 1}
 ```
 
-Where `-->` goes to the server over stdin and `<--` comes back over `stdout`.
+Where `-->` goes to the server over `stdin` and `<--` comes back over `stdout`.
 
 If the above code sits in a script called `server.py`, you can replicate the
 above with:
