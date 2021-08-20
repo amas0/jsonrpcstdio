@@ -8,8 +8,8 @@ from jsonrpcstdio.errors import JSONRPCError, MethodNotFoundError, InvalidParams
 
 
 class StdioJSONRPCServer:
-    def __init__(self):
-        self.jsonrpcserver = JSONRPCServer()
+    def __init__(self, read_hook: Callable[[bytes], bytes] = lambda x: x):
+        self.jsonrpcserver = JSONRPCServer(read_hook=read_hook)
 
     def __getattr__(self, item):
         return getattr(self.jsonrpcserver, item)
@@ -23,10 +23,12 @@ class StdioJSONRPCServer:
 
 
 class JSONRPCServer:
-    def __init__(self, reader=None, writer=None):
+    def __init__(self, reader=None, writer=None,
+                 read_hook: Callable[[bytes], bytes] = lambda x: x):
         self.methods = {}
         self.reader = reader
         self.writer = writer
+        self.read_hook = read_hook
 
     def register(self, method: str):
         def deco(func: Coroutine):
@@ -72,6 +74,7 @@ class JSONRPCServer:
         while True:
             incoming = await self.reader.read()
             if incoming:
+                incoming = self.read_hook(incoming)
                 try:
                     if is_request(incoming):
                         request = Request.decode(incoming)
