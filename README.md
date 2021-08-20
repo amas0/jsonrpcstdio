@@ -16,7 +16,7 @@ pip install jsonrpcstdio
 ### Basic usage
 
 General usage follows a Flask-like interface where you define a 
-server object and register methods to be accessed via RPC. For example:
+server object and register coroutines to be accessed via RPC. For example:
 
 ```python
 import asyncio
@@ -25,7 +25,7 @@ from jsonrpcstdio import StdioJSONRPCServer
 server = StdioJSONRPCServer()
 
 @server.register('subtract')
-def subtract(a, b):
+async def subtract(a, b):
     return a - b
 
 asyncio.run(

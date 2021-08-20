@@ -1,5 +1,5 @@
 import asyncio
-from typing import Callable, Optional, Union
+from typing import Callable, Coroutine, Optional, Union
 
 from aioconsole import get_standard_streams
 
@@ -14,6 +14,9 @@ class StdioJSONRPCServer:
     def __getattr__(self, item):
         return getattr(self.jsonrpcserver, item)
 
+    def register(self, method: str):
+        return self.jsonrpcserver.register(method)
+
     async def run(self):
         reader, writer = await get_standard_streams()
         await self.jsonrpcserver.run(reader, writer)
@@ -26,7 +29,7 @@ class JSONRPCServer:
         self.writer = writer
 
     def register(self, method: str):
-        def deco(func: Callable):
+        def deco(func: Coroutine):
             self.methods[method] = func
             return func
         return deco
