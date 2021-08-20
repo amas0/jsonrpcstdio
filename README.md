@@ -5,6 +5,14 @@ the [JSON RPC 2.0 specification](https://www.jsonrpc.org/specification)
 for arbitrary `StreamReader/StreamWriter` objects from `asyncio` with
 a particular implementation for communication over standard IO.
 
+### Installation
+
+Install via `pip`:
+
+```bash
+pip install jsonrpcstdio
+```
+
 ### Basic usage
 
 General usage follows a Flask-like interface where you define a 
